@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "regex9andCuda", "regex9andCuda\regex9andCuda.vcxproj", "{9162A027-B4A0-4AE5-A545-DF2F17BB306E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		DeviceEmulation|Win32 = DeviceEmulation|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9162A027-B4A0-4AE5-A545-DF2F17BB306E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9162A027-B4A0-4AE5-A545-DF2F17BB306E}.Debug|Win32.Build.0 = Debug|Win32
+		{9162A027-B4A0-4AE5-A545-DF2F17BB306E}.DeviceEmulation|Win32.ActiveCfg = DeviceEmulation|Win32
+		{9162A027-B4A0-4AE5-A545-DF2F17BB306E}.DeviceEmulation|Win32.Build.0 = DeviceEmulation|Win32
+		{9162A027-B4A0-4AE5-A545-DF2F17BB306E}.Release|Win32.ActiveCfg = Release|Win32
+		{9162A027-B4A0-4AE5-A545-DF2F17BB306E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
