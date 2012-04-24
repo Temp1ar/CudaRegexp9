@@ -2,8 +2,8 @@
 #define _REGEXP9_H_ 1
 
 /*********
- * utf.h *
- *********/
+* utf.h *
+*********/
 
 typedef unsigned short Rune;
 
@@ -23,91 +23,90 @@ enum
 };
 
 /*************
- * regexp9.h *
- *************/
+* regexp9.h *
+*************/
 
 #if defined(__cplusplus)
 extern "C" { 
 #endif
 
 #ifdef AUTOLIB
-AUTOLIB(regexp9)
+    AUTOLIB(regexp9)
 #endif
 
-/*
- *	Sub expression matches
- */
-struct Resub{
-	union
-	{
-		char *sp;
-		Rune *rsp;
-	}s;
-	union
-	{
-		char *ep;
-		Rune *rep;
-	}e;
-};
+        /*
+        *	Sub expression matches
+        */
+    struct Resub{
+        union
+        {
+            char *sp;
+            Rune *rsp;
+        }s;
+        union
+        {
+            char *ep;
+            Rune *rep;
+        }e;
+    };
 
-/*
- *	character class, each pair of rune's defines a range
- */
-struct Reclass{
-	Rune	*end;
-	Rune	spans[64];
-};
+    /*
+    *	character class, each pair of rune's defines a range
+    */
+    struct Reclass{
+        Rune	*end;
+        Rune	spans[64];
+    };
 
-/*
- *	Machine instructions
- */
-struct Reinst{
-	int	type;
-	union	{
-		Reclass	*cp;		/* class pointer */
-		Rune	r;		/* character */
-		int	subid;		/* sub-expression id for RBRA and LBRA */
-		Reinst	*right;		/* right child of OR */
-	}u1;
-	union {	/* regexp relies on these two being in the same union */
-		Reinst *left;		/* left child of OR */
-		Reinst *next;		/* next instruction for CAT & LBRA */
-	}u2;
-};
+    /*
+    *	Machine instructions
+    */
+    struct Reinst{
+        int	type;
+        union	{
+            Reclass	*cp;		/* class pointer */
+            Rune	r;		/* character */
+            int	subid;		/* sub-expression id for RBRA and LBRA */
+            Reinst	*right;		/* right child of OR */
+        }u1;
+        union {	/* regexp relies on these two being in the same union */
+            Reinst *left;		/* left child of OR */
+            Reinst *next;		/* next instruction for CAT & LBRA */
+        }u2;
+    };
 
-/*
- *	Reprogram definition
- */
-struct Reprog{
-	Reinst	*startinst;	/* start pc */
-	Reclass	classx[16];	/* .data */
-	Reinst	firstinst[5];	/* .text */
-};
+    /*
+    *	Reprogram definition
+    */
+    struct Reprog{
+        Reinst	*startinst;	/* start pc */
+        Reclass	classx[16];	/* .data */
+        Reinst	firstinst[5];	/* .text */
+    };
 
-extern __host__ Reprog	*regcomp9(char*);
-extern __host__ void	regerror9(char*);
-extern __device__ int	regexec9(const Reprog*, Reljunk*, Resub*, Relist*, Relist*, char*, int, int);
+    extern __host__ Reprog	*regcomp9(char*);
+    extern __device__ int	regexec9(const Reprog*, Reljunk*, Resub*, Relist*, Relist*, char*, int, int);
 
-// CUDA adapted
-extern __host__ Reprog* cu_regcomp9(char*, void*);
-extern __host__ __device__ Reprog* cu_relocate(Reprog *pp, size_t diff, size_t reinst_size);
-extern __host__ size_t cu_get_reinst_size(char* p);
+    // CUDA adapted
+    extern __host__ Reprog* cu_regcomp9(char*, void*);
+    extern __host__ __device__ Reprog* cu_relocate(Reprog *pp, size_t diff, size_t reinst_size);
+    extern __host__ size_t cu_get_reinst_size(char* p);
 
-extern __host__ __device__ int chartorune(Rune& rune, const char *str);
-extern __host__ __device__ Rune* runestrchr(const Rune *s, Rune c);
-extern __host__ __device__ char* utfrune(char *s, long c);
+    extern __host__ __device__ int chartorune(Rune& rune, const char *str);
+    extern __host__ __device__ Rune* runestrchr(const Rune *s, Rune c);
+    extern __host__ __device__ char* utfrune(char *s, long c);
 
 #if defined(__cplusplus)
 }
 #endif
 
 /*************
- * regcomp.h *
- *************/
+* regcomp.h *
+*************/
 
 /*
- *  substitution list
- */
+*  substitution list
+*/
 #define uchar __reuchar
 typedef unsigned char uchar;
 #define nelem(x) (sizeof(x)/sizeof((x)[0]))
@@ -116,7 +115,7 @@ typedef unsigned char uchar;
 typedef struct Resublist	Resublist;
 struct	Resublist
 {
-	Resub	m[NSUBEXP];
+    Resub	m[NSUBEXP];
 };
 
 /* max character classes per program */
@@ -127,11 +126,11 @@ extern Reprog	RePrOg;
 #define NCCRUNE	(sizeof(Reclass)/sizeof(Rune))
 
 /*
- * Actions and Tokens (Reinst types)
- *
- *	02xx are operators, value == precedence
- *	03xx are tokens, i.e. operands for operators
- */
+* Actions and Tokens (Reinst types)
+*
+*	02xx are operators, value == precedence
+*	03xx are tokens, i.e. operands for operators
+*/
 #define RUNE		0177
 #define	OPERATOR	0200	/* Bitmask of all operators */
 #define	START		0200	/* Start, used for marker on stack */
@@ -152,27 +151,27 @@ extern Reprog	RePrOg;
 #define	END		0377	/* Terminate: match found */
 
 /*
- *  regexec execution lists
- */
+*  regexec execution lists
+*/
 #define LISTSIZE	10
 #define BIGLISTSIZE	(10*LISTSIZE)
 typedef struct Relist	Relist;
 struct Relist
 {
-	Reinst*		inst;	/* Reinstruction of the thread */
-	Resublist	se;		/* matched subexpressions in this thread */
+    Reinst*		inst;	/* Reinstruction of the thread */
+    Resublist	se;		/* matched subexpressions in this thread */
 };
 typedef struct Reljunk	Reljunk;
 struct	Reljunk
 {
-	Relist*	relist[2];
-	Relist*	reliste[2];
-	int	starttype;
-	Rune	startchar;
-	char*	starts;
-	char*	eol;
-	Rune*	rstarts;
-	Rune*	reol;
+    Relist*	relist[2];
+    Relist*	reliste[2];
+    int	starttype;
+    Rune	startchar;
+    char*	starts;
+    char*	eol;
+    Rune*	rstarts;
+    Rune*	reol;
 };
 
 #endif
